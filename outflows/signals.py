@@ -26,4 +26,4 @@ def send_outflow_event(sender, instance, **kwargs):
         'quantity': instance.quantity,
         'description': instance.description
     }
-    notify.send_event(data)
+    notify.send_order_event(data)
