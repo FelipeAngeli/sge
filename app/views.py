@@ -7,7 +7,6 @@ from . import metrics
 
 @login_required(login_url='login')
 def home(request):
-    # Recupera os dados de métricas
     product_metrics = metrics.get_product_metrics()
     sales_metrics = metrics.get_sales_metrics()
     graphic_product_category_metric = metrics.get_graphic_product_category_metric()
@@ -15,11 +14,9 @@ def home(request):
     daily_sales_data = metrics.get_daily_sales_data()
     daily_sales_quantity_data = metrics.get_daily_sales_quantity_data()
 
-    # Verifica se há um registro em AIResult antes de tentar acessar o atributo result
     ai_result = AIResult.objects.first()
     ai_result_value = ai_result.result if ai_result else "Nenhum resultado disponível."
 
-    # Contexto para o template
     context = {
         'product_metrics': product_metrics,
         'sales_metrics': sales_metrics,
