@@ -14,16 +14,20 @@ def update_product_quantity(sender, instance, created, **kwargs):
             product.save()
 
 @receiver(post_save, sender=Outflow)
-def send_outflow_event(sender, instance, **kwargs):
-    notify = Notify()
-    
-    data = {
-        'event_type': 'outflow',
-        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'product': str(instance.product.title),
-        'product_cost_price': float(instance.product.cost_price),
-        'product_selling_price': float(instance.product.selling_price),
-        'quantity': instance.quantity,
-        'description': instance.description
-    }
-    notify.send_order_event(data)
+def send_outflow_event(sender, instance, created, **kwargs):
+    try:
+        if created:
+            notify = Notify()
+        
+            data = {
+                'event_type': 'outflow',
+                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'product': str(instance.product.title),
+                'product_cost_price': float(instance.product.cost_price),
+                'product_selling_price': float(instance.product.selling_price),
+                'quantity': instance.quantity,
+                'description': instance.description
+            }
+            notify.send_order_event(data)
+    except Exception as e:
+        print(e)
